@@ -6,8 +6,4 @@ spring:
     port: 5673
     username: roadhog
     password: 123456
-    virtual-host: /
-
-
-server:
-  port: 10001
+    virtual-host: /virtualh

@@ -7,23 +7,23 @@ import org.springframework.context.annotation.Configuration;
 
 /*RabbitMQ配置文件*/
 @Configuration
-public class RabbitAdminConfig {
+public class RabbitConfig {
 
-    public static String exchangeName = "EXCHANGE_TOPIC";
+    public static String EXCHANGE_NAME = "EXCHANGE_TOPIC";
 
-    public static String queueName = "QUEUE_TOPIC";
+    public static String QUEUE_NAME = "QUEUE_TOPIC";
 
     //1.交换机
     @Bean("exchange")
     public Exchange exchange() {
-        return ExchangeBuilder.topicExchange(exchangeName).durable(true).build();
+        return ExchangeBuilder.topicExchange(EXCHANGE_NAME).durable(true).build();
     }
 
 
     //2.队列
     @Bean("queue")
     public Queue queue() {
-        return QueueBuilder.durable(queueName).build();
+        return QueueBuilder.durable(QUEUE_NAME).build();
     }
 
     //3.绑定关系
