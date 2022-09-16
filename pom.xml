@@ -24,6 +24,8 @@
         <module>spring-boot-fastdfs</module>
         <module>spring-boot-quartz</module>
         <module>spring-boot-swagger</module>
+        <module>spring-boot-mq-producer</module>
+        <module>spring-boot-mq-consumer</module>
     </modules>
 
 
