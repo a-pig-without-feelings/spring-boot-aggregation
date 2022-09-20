@@ -26,6 +26,7 @@
         <module>spring-boot-swagger</module>
         <module>spring-boot-mq-producer</module>
         <module>spring-boot-mq-consumer</module>
+        <module>spring-boot-poi</module>
     </modules>
 
 
