@@ -1,15 +1,16 @@
 package com.roadhog;
 
-import com.csvreader.CsvWriter;
-import com.roadhog.domin.User;
-import com.roadhog.utils.ExcelUtils;
+import com.roadhog.domin.StudentForTest;
+import com.roadhog.utils.CsvUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.nio.charset.Charset;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @SpringBootTest
 class SpringBootPoiApplicationTests {
@@ -28,38 +29,85 @@ class SpringBootPoiApplicationTests {
     }
 
     @Test
-    void cvsTest(){
+    void csvTest() {
+        StudentForTest s = new StudentForTest();
+        s.setAge(21);
+        s.setEmail("11");
+        s.setName("yaochongwei");
+        s.setPhone("157");
+        s.setSex("1");
+
+        StudentForTest s1 = new StudentForTest();
+        s1.setAge(22);
+        s1.setEmail("11");
+        s1.setName("yaochongwei");
+        s1.setPhone("157");
+        s1.setSex("0");
+        List<StudentForTest> l = new ArrayList<StudentForTest>();
+        l.add(s);
+        l.add(s1);
+        String csvFilePath = "E://yaochongwei.csv";
+        String[] csvHeaders = {"年龄", "邮件", "姓名", "手机", "性别"};
+        CsvUtils.writeCSV(l, csvFilePath, csvHeaders);
+    }
+
+    //导出到csv文件
+    public static void Array2CSV(ArrayList<ArrayList<String>> data, String path) {
         try {
-            String csvFilePath = "D:\\java265\\test.csv";
-            CsvWriter writer =new CsvWriter(csvFilePath,',', Charset.forName("utf-8"));
-            String[] contents = {"maomao","java265","最爱java"};
-            writer.writeRecord(contents,true);//写一行，3列  ,true表示写完换行
-            writer.writeRecord(contents,false);//再写一行，3列  ,false写完不换行，只要不close就能一直写。
-            writer.close();
-        } catch (IOException e) {
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), "UTF-8"));
+            for (int i = 0; i < data.size(); i++) {
+                ArrayList<String> onerow = data.get(i);
+                for (int j = 0; j < onerow.size(); j++) {
+                    out.write(DelQuota(onerow.get(j)));
+                    out.write(",");
+                }
+                out.newLine();
+            }
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
-    @Test
-    void listTest(){
-        List<User> userList = new ArrayList<User>();
-        User user01 = new User("xiabin", 12);
-        User user02 = new User("xiahuo", 13);
-        User user03 = new User("xiashui", 14);
-        userList.add(user01);
-        userList.add(user02);
-        userList.add(user03);
-        System.out.println(userList);
-        for (User user : userList) {
-            System.out.println(user);
-            Field[] fields = user.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                System.out.println(field);
-                System.out.println("----------");
-            }
+
+    public static String DelQuota(String str) {
+        String result = str;
+        String[] strQuota = {"~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "`", ";", "'", ",", ".", "/", ":", "/,", "<", ">", "?"};
+        for (int i = 0; i < strQuota.length; i++) {
+            if (result.indexOf(strQuota[i]) > -1)
+                result = result.replace(strQuota[i], "");
         }
-
-
+        return result;
     }
 
+    @Test
+    void main() {
+            StudentForTest s=new StudentForTest();
+            s.setAge(21);
+            s.setEmail("11");
+            s.setName("yaochongwei");
+            s.setPhone("157");
+            s.setSex("1");
+
+            StudentForTest s1=new StudentForTest();
+            s1.setAge(22);
+            s1.setEmail("11");
+            s1.setName("yaochongwei");
+            s1.setPhone("157");
+            s1.setSex("0");
+
+            List<StudentForTest> l=new ArrayList<StudentForTest>();
+            l.add(s);
+            l.add(s1);
+
+            /*以上为测试用Arraylist数据*/
+
+            String csvFilePath = "D://yaochongwei.csv";
+
+            String[] csvHeaders = { "年龄", "邮件", "姓名","手机","性别" };
+
+            CsvUtils.writeCSV(l,csvFilePath,csvHeaders);
+    }
 }
