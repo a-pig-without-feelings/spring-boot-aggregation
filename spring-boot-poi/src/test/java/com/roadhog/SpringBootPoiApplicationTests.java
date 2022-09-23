@@ -1,19 +1,25 @@
 package com.roadhog;
 
 import com.roadhog.domin.StudentForTest;
-import com.roadhog.utils.CsvUtils;
+import com.roadhog.utils.ExcelUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+
+import java.io.File;
+import java.io.FileInputStream;
+
+
+import java.io.*;
+import java.util.*;
 
 @SpringBootTest
 class SpringBootPoiApplicationTests {
+    @Autowired
+    ExcelUtils excelUtils;
 
     @Test
     void uuidTest() {
@@ -28,86 +34,118 @@ class SpringBootPoiApplicationTests {
         System.out.println(sb);
     }
 
+
     @Test
-    void csvTest() {
+    void excelTest() {
         StudentForTest s = new StudentForTest();
         s.setAge(21);
         s.setEmail("11");
         s.setName("yaochongwei");
-        s.setPhone("157");
+        s.setPhone("15700001111");
         s.setSex("1");
 
         StudentForTest s1 = new StudentForTest();
         s1.setAge(22);
         s1.setEmail("11");
         s1.setName("yaochongwei");
-        s1.setPhone("157");
+        s1.setPhone("15799992222");
         s1.setSex("0");
+
+        StudentForTest s3 = new StudentForTest();
+        s3.setAge(323);
+        s3.setEmail("11");
+        s3.setName("yafochongjwei");
+        s3.setPhone("15792222");
+        s3.setSex("99");
+
         List<StudentForTest> l = new ArrayList<StudentForTest>();
         l.add(s);
         l.add(s1);
-        String csvFilePath = "E://yaochongwei.csv";
-        String[] csvHeaders = {"年龄", "邮件", "姓名", "手机", "性别"};
-        CsvUtils.writeCSV(l, csvFilePath, csvHeaders);
-    }
+        l.add(s3);
+        System.out.println(l.size());
 
-    //导出到csv文件
-    public static void Array2CSV(ArrayList<ArrayList<String>> data, String path) {
-        try {
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), "UTF-8"));
-            for (int i = 0; i < data.size(); i++) {
-                ArrayList<String> onerow = data.get(i);
-                for (int j = 0; j < onerow.size(); j++) {
-                    out.write(DelQuota(onerow.get(j)));
-                    out.write(",");
-                }
-                out.newLine();
-            }
-            out.flush();
-            out.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        ArrayList<Map<String, Object>> objects = new ArrayList<>();
+
+        for (int i = 0; i < l.size(); i++) {
+            HashMap<String, Object> objectObjectHashMap = new HashMap<>();
+            objectObjectHashMap.put("age", l.get(i).getAge());
+            objectObjectHashMap.put("email", l.get(i).getEmail());
+            objectObjectHashMap.put("name", l.get(i).getName());
+            objectObjectHashMap.put("phone", l.get(i).getPhone());
+            objectObjectHashMap.put("sex", l.get(i).getSex());
+            objects.add(objectObjectHashMap);
         }
 
-    }
-
-    public static String DelQuota(String str) {
-        String result = str;
-        String[] strQuota = {"~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "`", ";", "'", ",", ".", "/", ":", "/,", "<", ">", "?"};
-        for (int i = 0; i < strQuota.length; i++) {
-            if (result.indexOf(strQuota[i]) > -1)
-                result = result.replace(strQuota[i], "");
-        }
-        return result;
+        ExcelUtils.getInstance().createExcel(objects, "data001", "shuju");
     }
 
     @Test
-    void main() {
-            StudentForTest s=new StudentForTest();
-            s.setAge(21);
-            s.setEmail("11");
-            s.setName("yaochongwei");
-            s.setPhone("157");
-            s.setSex("1");
+    void multipartFileTest() {
+        StudentForTest s = new StudentForTest();
+        s.setAge(21);
+        s.setEmail("11");
+        s.setName("yaochongwei");
+        s.setPhone("15700001111");
+        s.setSex("1");
 
-            StudentForTest s1=new StudentForTest();
-            s1.setAge(22);
-            s1.setEmail("11");
-            s1.setName("yaochongwei");
-            s1.setPhone("157");
-            s1.setSex("0");
+        StudentForTest s1 = new StudentForTest();
+        s1.setAge(22);
+        s1.setEmail("11");
+        s1.setName("yaochongwei");
+        s1.setPhone("15799992222");
+        s1.setSex("0");
 
-            List<StudentForTest> l=new ArrayList<StudentForTest>();
-            l.add(s);
-            l.add(s1);
+        StudentForTest s3 = new StudentForTest();
+        s3.setAge(323);
+        s3.setEmail("11");
+        s3.setName("yafochongjwei");
+        s3.setPhone("15792222");
+        s3.setSex("99");
 
-            /*以上为测试用Arraylist数据*/
+        List<StudentForTest> l = new ArrayList<StudentForTest>();
+        l.add(s);
+        l.add(s1);
+        l.add(s3);
+        ArrayList<Map<String, Object>> objects = new ArrayList<>();
 
-            String csvFilePath = "D://yaochongwei.csv";
+        for (int i = 0; i < l.size(); i++) {
+            HashMap<String, Object> objectObjectHashMap = new HashMap<>();
+            objectObjectHashMap.put("age", l.get(i).getAge());
+            objectObjectHashMap.put("email", l.get(i).getEmail());
+            objectObjectHashMap.put("name", l.get(i).getName());
+            objectObjectHashMap.put("phone", l.get(i).getPhone());
+            objectObjectHashMap.put("sex", l.get(i).getSex());
+            objects.add(objectObjectHashMap);
+        }
+        excelUtils.createExcel(objects, "data001", "shuju");
 
-            String[] csvHeaders = { "年龄", "邮件", "姓名","手机","性别" };
-
-            CsvUtils.writeCSV(l,csvFilePath,csvHeaders);
     }
+
+
+    /**
+     * @param path
+     * @return org.springframework.web.multipart.MultipartFile
+     * @description: 根据文件路径，获取MultipartFile对象
+     * @author: nisan
+     * @date: 2022/1/18 13:08
+     */
+    public static MultipartFile createMfileByPath(String path) {
+        MultipartFile mFile = null;
+        try {
+            File file = new File(path);
+            FileInputStream fileInputStream = new FileInputStream(file);
+
+            String fileName = file.getName();
+            fileName = fileName.substring((fileName.lastIndexOf("/") + 1));
+            mFile = new MockMultipartFile(fileName, fileName, "APPLICATION_OCTET_STREAM", fileInputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mFile;
+
+
+    }
+
+
 }
