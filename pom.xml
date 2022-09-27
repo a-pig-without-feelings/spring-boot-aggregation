@@ -27,6 +27,7 @@
         <module>spring-boot-mq-producer</module>
         <module>spring-boot-mq-consumer</module>
         <module>spring-boot-poi</module>
+        <module>spring-boot-mybatisplus</module>
     </modules>
 
 
