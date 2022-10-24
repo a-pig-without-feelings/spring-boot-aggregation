@@ -10,6 +10,8 @@ public class SpringBootMybatisplusApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SpringBootMybatisplusApplication.class, args);
+        System.out.println("容器启动成功");
+
     }
 
 }

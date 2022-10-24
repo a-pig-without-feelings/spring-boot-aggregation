@@ -3,8 +3,6 @@ package com.roadhog.utils;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,10 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * @author xia
+ * @author river
  * @date 2021/4/29
  */
-@Service
 public class ExcelUtils {
 
     private static ExcelUtils instance = new ExcelUtils();
@@ -106,6 +103,4 @@ public class ExcelUtils {
         }
         return path;
     }
-
-
 }
