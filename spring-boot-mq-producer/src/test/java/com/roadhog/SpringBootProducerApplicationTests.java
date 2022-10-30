@@ -12,6 +12,7 @@ class SpringBootProducerApplicationTests {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
     @Test
     void contextLoads() {
         rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE_NAME,"boot.123","hello world!");
